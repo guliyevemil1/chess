@@ -7,25 +7,22 @@ import com.eguliyev.chess.model.*;
  * Created by eguliyev on 12/20/14.
  */
 public class Pawn extends Piece {
-    private static enum MoveKind {
-        ONE, TWO, TAKE, ENPASSANT, ILLEGAL
-    }
-
     public Pawn(Board board, Square initial, Color color) {
         super(board, initial, color);
         this.pieceKind = PieceKind.PAWN;
     }
 
-    public MoveKind movementKind(Square next) {
+    @Override
+    public MoveKind canTakeOrMoveTo(Square next) {
         if (next.x == this.currentSquare.x && (next.y - this.currentSquare.y) * this.color.toInt() == 1) {
-            return MoveKind.ONE;
+            return MoveKind.NORMAL;
         } else if (next.x == this.currentSquare.x && (next.y - this.currentSquare.y) * this.color.toInt() == 2) {
-            return MoveKind.TWO;
+            return MoveKind.PAWN_TWO;
         } else if (Math.abs(next.x - this.currentSquare.x) == 1 &&
                 (next.y - this.currentSquare.y) * this.color.toInt() == 1 &&
                 this.board.getPiece(next) != null &&
                 this.board.getPiece(next).color == this.color.opposite()) {
-            return MoveKind.TAKE;
+            return MoveKind.PAWN_TAKE;
         } else if (Math.abs(next.x - this.currentSquare.x) == 1 &&
                 (next.y - this.currentSquare.y) * this.color.toInt() == 1 &&
                 next.squareEquals(this.board.getEnpassantableSquare())) {
@@ -36,25 +33,22 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Piece.MoveKind canMoveTo(Square next) {
-        MoveKind moveKind = movementKind(next);
-        if (moveKind == MoveKind.ONE || moveKind == MoveKind.TWO) {
-            return Piece.MoveKind.NORMAL;
-        } else {
-            return Piece.MoveKind.ILLEGAL;
-        }
-    }
+    public MoveKind move(Square next) throws ChessException {
+        MoveKind moveKind = canTakeOrMoveTo(next);
 
-    @Override
-    public Piece.MoveKind canTakeOrMoveTo(Square next) throws ChessException {
-        MoveKind moveKind = movementKind(next);
-        if (moveKind == MoveKind.ILLEGAL) {
-            return Piece.MoveKind.ILLEGAL;
-        } else if (moveKind == MoveKind.ENPASSANT) {
-            return Piece.MoveKind.ENPASSANT;
-        } else {
-            return Piece.MoveKind.NORMAL;
+        switch (moveKind) {
+            case ENPASSANT:
+                Square enpassantableSquare = this.board.getEnpassantableSquare();
+                this.board.setPiece(enpassantableSquare.x, this.color.pawnStartingPosition(3), null);
+            case NORMAL:
+            case PAWN_TAKE:
+            case PAWN_TWO:
+            case PROMOTION:
+                moveHelper(next);
+                break;
         }
+
+        return moveKind;
     }
 
     @Override

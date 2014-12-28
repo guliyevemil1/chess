@@ -7,6 +7,8 @@ public class Square {
     public int x;
     public int y;
 
+    Square() {}
+
     public Square(int x, int y) {
         this.x = x;
         this.y = y;
@@ -21,23 +23,13 @@ public class Square {
         return this.x == that.x && this.y == that.y;
     }
 
-    public boolean atLeastOneNonZero() {
-        return this.x != 0 || this.y != 0;
-    }
+    public Direction getMovementDirection(Square that) {
+        Direction result = new Direction(this, that);
 
-    public boolean atLeastOneZero() {
-        return this.x == 0 || this.y == 0;
-    }
-
-    public Square getMovementDirection(Square that) {
-        Square result = new Square(0,0);
-        result.x = Integer.signum(that.x - this.x);
-        result.y = Integer.signum(that.y - this.y);
-
-        if (result.atLeastOneNonZero()) {
+        if (result.isDirected()) {
             if (Math.abs(that.x - this.x) == Math.abs(that.y - this.y)) {
                 return result;
-            } else if (result.atLeastOneZero()) {
+            } else if (result.rookLikeDirection()) {
                 return result;
             }
         }

@@ -14,9 +14,9 @@ public class Bishop extends Piece {
 
     @Override
     public MoveKind canMoveTo(Square next) throws ChessException {
-        Square direction = getDirection(next);
+        Direction direction = getDirection(next);
 
-        if (!direction.atLeastOneZero()) {
+        if (!direction.rookLikeDirection()) {
             return horizontalVerticalMovementHelper(direction, next);
         } else {
             return MoveKind.ILLEGAL;

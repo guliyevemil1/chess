@@ -1,7 +1,6 @@
 package com.eguliyev.chess.controller;
 
 import com.eguliyev.chess.ChessConstants;
-
 import org.mortbay.jetty.Server;
 
 /**

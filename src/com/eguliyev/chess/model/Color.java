@@ -21,12 +21,16 @@ public enum Color {
             return 1;
         }
     }
-
     public int pawnStartingPosition() {
+        return pawnStartingPosition(1);
+    }
+
+
+    public int pawnStartingPosition(int y) {
         if (this == BLACK) {
-            return 6;
+            return 7 - y;
         } else {
-            return 1;
+            return y;
         }
     }
 }

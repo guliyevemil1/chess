@@ -15,6 +15,12 @@ public class BoardWrapper {
 
     public void setPiece(int x, int y, Piece piece) {
         this.board.pieces[x][y] = piece;
+        piece.currentSquare = new Square(x, y);
+    }
+
+    public void setPiece(Square square, Piece piece) {
+        this.board.pieces[square.x][square.y] = piece;
+        piece.currentSquare = square;
     }
 
     public Piece getPiece(int x, int y) {
@@ -23,6 +29,14 @@ public class BoardWrapper {
 
     public Square getEnpassantableSquare() {
         return this.board.enPassantableSquare;
+    }
+
+    public void setEnpassantableSquare(Square that) {
+        this.board.enPassantableSquare = that;
+    }
+
+    public void changeSide() {
+        this.board.turn = this.board.turn.opposite();
     }
 
     public boolean canAttack(Color color, Square square) throws ChessException {

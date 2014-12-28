@@ -18,7 +18,7 @@ public class King extends Piece {
     }
 
     private boolean canCastle(Square next) throws ChessException {
-        if (hasMoved || (next.y != this.currentSquare.y) || isInCheck()) {
+        if (hasMoved || next.y != this.currentSquare.y || isInCheck()) {
             return false;
         }
 
@@ -59,12 +59,35 @@ public class King extends Piece {
         return MoveKind.ILLEGAL;
     }
 
+    private void moveRook(Square next) throws ChessException {
+        int xi, xf;
+
+        if (next.x == 2) {
+            xi = 0;
+            xf = 3;
+        } else if (next.x == 6) {
+            xi = 7;
+            xf = 5;
+        } else {
+            throw new ChessException("How?!");
+        }
+
+        this.board.setPiece(xf, this.currentSquare.y, board.getPiece(xi, currentSquare.y));
+    }
+
     @Override
     public MoveKind move(Square next) throws ChessException {
         MoveKind moveKind = moveHelper(next);
+
+        if (moveKind == MoveKind.CASTLE) {
+            moveRook(next);
+        }
+
         if (moveKind != MoveKind.ILLEGAL) {
             hasMoved = true;
+            this.board.setPiece(next, this);
         }
+
         return moveKind;
     }
 

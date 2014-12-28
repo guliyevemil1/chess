@@ -64,49 +64,50 @@ public class Board {
         }
     }
 
-    public boolean canAttack(Color color, Square square) throws ChessException {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (pieces[i][j] != null &&
-                        pieces[i][j].color == color &&
-                        pieces[i][j].canTakeOrMoveTo(square) != Piece.MoveKind.ILLEGAL) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+//    public boolean canAttack(Color color, Square square) throws ChessException {
+//        for (int i = 0; i < BOARD_SIZE; i++) {
+//            for (int j = 0; j < BOARD_SIZE; j++) {
+//                if (pieces[i][j] != null &&
+//                        pieces[i][j].color == color &&
+//                        pieces[i][j].canTakeOrMoveTo(square) != Piece.MoveKind.ILLEGAL) {
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     public Piece getPiece(Square square) {
         return pieces[square.x][square.y];
     }
-    public boolean isEmpty(Square square) {
-        return getPiece(square) == null;
-    }
 
-    public King getKing(Color c) {
-        if (c == Color.WHITE) {
-            return whiteKing;
-        } else {
-            return blackKing;
-        }
-    }
-
-    @Override
-    public String toString() {
-        String result = "";
-
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (pieces[j][BOARD_SIZE - 1 - i] == null) {
-                    result += " ";
-                } else {
-                    result += pieces[j][BOARD_SIZE - 1 - i].toString();
-                }
-                result += "" + j + (BOARD_SIZE - 1 -i) + " ";
-            }
-            result += "\n";
-        }
-        return result;
-    }
+//    public boolean isEmpty(Square square) {
+//        return getPiece(square) == null;
+//    }
+//
+//    public King getKing(Color c) {
+//        if (c == Color.WHITE) {
+//            return whiteKing;
+//        } else {
+//            return blackKing;
+//        }
+//    }
+//
+//    @Override
+//    public String toString() {
+//        String result = "";
+//
+//        for (int i = 0; i < BOARD_SIZE; i++) {
+//            for (int j = 0; j < BOARD_SIZE; j++) {
+//                if (pieces[j][BOARD_SIZE - 1 - i] == null) {
+//                    result += " ";
+//                } else {
+//                    result += pieces[j][BOARD_SIZE - 1 - i].toString();
+//                }
+//                result += "" + j + (BOARD_SIZE - 1 -i) + " ";
+//            }
+//            result += "\n";
+//        }
+//        return result;
+//    }
 }
