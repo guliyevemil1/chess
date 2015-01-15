@@ -15,8 +15,8 @@ public class Direction extends Square {
     }
 
     public Direction(Square a, Square b) {
-        this.x = Integer.signum(a.x - b.x);
-        this.y = Integer.signum(a.y - b.y);
+        this.x = Integer.signum(b.x - a.x);
+        this.y = Integer.signum(b.y - a.y);
     }
 
     public boolean isDirected() {

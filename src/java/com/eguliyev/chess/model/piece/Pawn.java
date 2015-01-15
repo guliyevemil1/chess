@@ -37,17 +37,24 @@ public class Pawn extends Piece {
         MoveKind moveKind = canTakeOrMoveTo(next);
 
         switch (moveKind) {
-            case ENPASSANT:
-                Square enpassantableSquare = this.board.getEnpassantableSquare();
-                this.board.setPiece(enpassantableSquare.x, this.color.pawnStartingPosition(3), null);
+            case PAWN_TWO:
+                this.board.setEnpassantableSquare(new Square(next.x, this.color.pawnStartingPosition(2)));
             case NORMAL:
             case PAWN_TAKE:
-            case PAWN_TWO:
             case PROMOTION:
-                moveHelper(next);
                 break;
+            case ENPASSANT:
+                Square enpassantableSquare = this.board.getEnpassantableSquare();
+                this.board.setPiece(enpassantableSquare.x, this.color.opposite().pawnStartingPosition(3), null);
+                this.board.setPiece(this.currentSquare.x, this.currentSquare.y, null);
+                this.currentSquare = next;
+                this.board.setPiece(this.currentSquare.x, this.currentSquare.y, this);
+                break;
+            default:
+                return MoveKind.ILLEGAL;
         }
 
+        moveHelper(next);
         return moveKind;
     }
 

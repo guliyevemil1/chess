@@ -20,7 +20,7 @@ public class Square {
     }
 
     public boolean squareEquals(Square that) {
-        return this.x == that.x && this.y == that.y;
+        return that == null ? false : this.x == that.x && this.y == that.y;
     }
 
     public Direction getMovementDirection(Square that) {

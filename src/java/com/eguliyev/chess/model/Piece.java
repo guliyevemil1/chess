@@ -54,7 +54,7 @@ public abstract class Piece {
 
     public MoveKind horizontalVerticalMovementHelper(Direction direction, Square next) throws ChessException {
         if (direction == null) {
-            throw new ChessException("Can't move there.");
+            return MoveKind.ILLEGAL;
         } else {
             int xDiff = direction.x;
             int yDiff = direction.y;
@@ -91,7 +91,7 @@ public abstract class Piece {
 
     public MoveKind moveHelper(Square next) throws ChessException {
         try {
-            if (this.canTakeOrMoveTo(next) != MoveKind.ILLEGAL) {
+            if (this.board.board.turn == this.color && this.canTakeOrMoveTo(next) != MoveKind.ILLEGAL) {
                 board.setPiece(this.currentSquare.x, this.currentSquare.y, null);
                 this.currentSquare = next;
                 board.setPiece(this.currentSquare.x, this.currentSquare.y, this);
@@ -121,13 +121,14 @@ public abstract class Piece {
     public boolean attemptMove(Square next, PieceKind pieceKindForPromotion) throws ChessException {
         Board oldBoard = this.board.board;
         Board oldBoardCopy = new Board(oldBoard);
-        this.board.board = oldBoardCopy;
         MoveKind myMove = this.move(next);
 
-
         if (myMove != MoveKind.ILLEGAL && !this.board.getKing(this.color).isInCheck()) {
+            this.board.setPiece(this.currentSquare.x, this.currentSquare.y, null);
             if (myMove == MoveKind.PROMOTION) {
                 this.board.setPiece(next, pieceKindForPromotion.create(this.board.board, this.color));
+            } else {
+                this.board.setPiece(next, this);
             }
 
             takeCareOfEnpassant(myMove);
@@ -135,7 +136,7 @@ public abstract class Piece {
             return true;
         }
 
-        this.board.board = oldBoard;
+        this.board.board = oldBoardCopy;
         return false;
     }
 }

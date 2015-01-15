@@ -9,13 +9,20 @@ import com.eguliyev.chess.model.piece.*;
 public class BoardWrapper {
     Board board;
 
+    BoardWrapper() {
+        this.board = new Board();
+    }
+
     BoardWrapper(Board board) {
         this.board = board;
     }
 
     public void setPiece(int x, int y, Piece piece) {
         this.board.pieces[x][y] = piece;
-        piece.currentSquare = new Square(x, y);
+
+        if (piece != null) {
+            piece.currentSquare = new Square(x, y);
+        }
     }
 
     public void setPiece(Square square, Piece piece) {
@@ -83,5 +90,27 @@ public class BoardWrapper {
             result += "\n";
         }
         return result;
+    }
+
+    public void makeMove(int a, int b, int c, int d) {
+        new Move(a,b,c,d).attemptMove(this.board);
+        System.out.println(this);
+    }
+
+    public static void main(String[] args) throws ChessException {
+        BoardWrapper board = new BoardWrapper();
+
+        System.out.println(board);
+        board.makeMove(4,1,4,3);
+        board.makeMove(3,6,3,4);
+        board.makeMove(4,3,4,4);
+        board.makeMove(5,6,5,4);
+        board.makeMove(4,4,5,5);
+        board.makeMove(6,7,5,5);
+        board.makeMove(3,0,5,2);
+        board.makeMove(4,6,5,5);
+        board.makeMove(5,0,1,4);
+        board.makeMove(1,7,0,5);
+//        System.out.print(board.board.blackKing.isInCheck());
     }
 }
