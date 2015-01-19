@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+    <script src="http://code.createjs.com/createjs-2014.12.12.min.js"></script>
+    <script>
+      var start_x = 0;
+      var start_y = 0;
+      var square_size = 90;
+
+      function makeRectangles(stage) {
+
+          for (i = 0; i < 8; i++) {
+              for (j = 0; j < 8; j++) {
+                  var rect = new createjs.Shape();
+                  if ((i + j) % 2 == 0) {
+                    rect.graphics.beginFill("#909890").drawRect(square_size * i, square_size * j, square_size, square_size);
+                  } else {
+                    rect.graphics.beginFill("#227070").drawRect(square_size * i, square_size * j, square_size, square_size);
+                  }
+                  stage.addChild(rect);
+              }
+          }
+          stage.update();
+      };
+
+      function drawPiece(stage, img_loc, x, y) {
+        var image = new Image();
+        image.src = img_loc;
+        var temp = new createjs.Bitmap(image);
+        temp.x = x;
+        temp.y = y;
+        stage.addChild(temp);
+        temp.image.onload = function() { stage.update(); }
+
+        temp.addEventListener("mousedown", function (evt) {
+                temp.prevX = temp.x;
+                temp.prevY = temp.y;
+                console.log(temp.x + ", " + temp.y);
+            });
+
+        temp.addEventListener("pressmove", function (evt) {
+                temp.x = evt.stageX - square_size / 2;
+                temp.y = evt.stageY - square_size / 2;
+                stage.update();
+            });
+
+        temp.addEventListener("pressup", function (evt) {
+                console.log("release " + temp.prevX + ", " + temp.prevY);
+
+                temp.x = temp.prevX;
+                temp.y = temp.prevY;
+
+                var next_x = Math.floor((evt.stageX - start_x) / square_size);
+                var next_y = Math.floor((evt.stageY - start_y) / square_size);
+
+                var response = jQuery.ajax({ 
+                        type : 'GET',
+                        url : "http://localhost:10000",
+                        xhrFields: { withCredentials : true },
+                        crossDomain : true 
+                    } );
+
+                console.log(response);
+
+                temp.x = next_x * square_size;
+                temp.y = next_y * square_size;
+                stage.update();
+            });
+      }
+
+      function drawPieces(stage) {
+        drawPiece(stage, "resources/wk.png", 0, 0);
+      };
+
+      function init() {
+        var stage = new createjs.Stage("demoCanvas");
+        makeRectangles(stage);
+        drawPieces(stage);
+      }
+
+    </script>
+  </head>
+  <body onload="init();">
+    <canvas id="demoCanvas" width="720" height="720"></canvas>
+  </body>
+</html>
