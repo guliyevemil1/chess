@@ -10,30 +10,30 @@ public class Move {
     private Square end;
     private Piece.PieceKind pieceToPromoteTo;
 
-    public Move(char[] chars) throws ChessException {
+    public Move(String[] strings) {
         this(
-            chars[0] - '0',
-            chars[1] - '0',
-            chars[2] - '0',
-            chars[3] - '0'
+            strings[0].charAt(0) - '0',
+            strings[1].charAt(0) - '0',
+            strings[2].charAt(0) - '0',
+            strings[3].charAt(0) - '0'
         );
 
-        if (chars.length == 5) {
-            switch (chars[4]) {
-                case 'Q':
+        if (strings.length == 5) {
+            switch (strings[4]) {
+                case "Q":
                     this.pieceToPromoteTo = Piece.PieceKind.QUEEN;
                     break;
-                case 'B':
+                case "B":
                     this.pieceToPromoteTo = Piece.PieceKind.BISHOP;
                     break;
-                case 'N':
+                case "N":
                     this.pieceToPromoteTo = Piece.PieceKind.KNIGHT;
                     break;
-                case 'R':
+                case "R":
                     this.pieceToPromoteTo = Piece.PieceKind.ROOK;
                     break;
                 default:
-                    throw new ChessException("This should never happen");
+                    this.pieceToPromoteTo = null;
             }
         }
     }

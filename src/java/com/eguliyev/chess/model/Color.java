@@ -33,4 +33,8 @@ public enum Color {
             return y;
         }
     }
+
+    public String toShortString() {
+        return this.toString().substring(0, 1).toLowerCase();
+    }
 }

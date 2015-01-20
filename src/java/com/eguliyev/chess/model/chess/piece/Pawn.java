@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model.piece;
+package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
 import com.eguliyev.chess.model.*;
@@ -34,9 +34,15 @@ public class Pawn extends Piece {
 
     @Override
     public MoveKind move(Square next) throws ChessException {
+        if (!isItMyTurn()) {
+            return MoveKind.ILLEGAL;
+        }
+
         MoveKind moveKind = canTakeOrMoveTo(next);
 
         switch (moveKind) {
+            case ILLEGAL:
+                return MoveKind.ILLEGAL;
             case PAWN_TWO:
                 this.board.setEnpassantableSquare(new Square(next.x, this.color.pawnStartingPosition(2)));
             case NORMAL:

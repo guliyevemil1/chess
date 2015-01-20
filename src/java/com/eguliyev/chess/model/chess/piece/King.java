@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model.piece;
+package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
 import com.eguliyev.chess.model.*;
@@ -77,6 +77,10 @@ public class King extends Piece {
 
     @Override
     public MoveKind move(Square next) throws ChessException {
+        if (!isItMyTurn()) {
+            return MoveKind.ILLEGAL;
+        }
+
         MoveKind moveKind = moveHelper(next);
 
         if (moveKind == MoveKind.CASTLE) {

@@ -1,7 +1,7 @@
 package com.eguliyev.chess.model;
 
 import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.piece.*;
+import com.eguliyev.chess.model.chess.piece.*;
 
 /**
  * Created by eguliyev on 12/27/14.
@@ -15,6 +15,10 @@ public class BoardWrapper {
 
     BoardWrapper(Board board) {
         this.board = board;
+    }
+
+    public Color getTurn() {
+        return board.getTurn();
     }
 
     public void setPiece(int x, int y, Piece piece) {

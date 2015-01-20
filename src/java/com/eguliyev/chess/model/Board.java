@@ -1,7 +1,8 @@
 package com.eguliyev.chess.model;
 
-import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.piece.*;
+import com.eguliyev.chess.model.chess.piece.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -12,8 +13,12 @@ public class Board {
     protected Square enPassantableSquare = null;
     protected Piece[][] pieces;
 
-    King whiteKing;
-    King blackKing;
+    protected King whiteKing;
+    protected King blackKing;
+
+    public Color getTurn() {
+        return turn;
+    }
 
     public Board(Board that) {
         this.pieces = new Piece[BOARD_SIZE][BOARD_SIZE];
@@ -64,50 +69,8 @@ public class Board {
         }
     }
 
-//    public boolean canAttack(Color color, Square square) throws ChessException {
-//        for (int i = 0; i < BOARD_SIZE; i++) {
-//            for (int j = 0; j < BOARD_SIZE; j++) {
-//                if (pieces[i][j] != null &&
-//                        pieces[i][j].color == color &&
-//                        pieces[i][j].canTakeOrMoveTo(square) != Piece.MoveKind.ILLEGAL) {
-//                    return true;
-//                }
-//            }
-//        }
-//        return false;
-//    }
-
     public Piece getPiece(Square square) {
         return pieces[square.x][square.y];
     }
 
-//    public boolean isEmpty(Square square) {
-//        return getPiece(square) == null;
-//    }
-//
-//    public King getKing(Color c) {
-//        if (c == Color.WHITE) {
-//            return whiteKing;
-//        } else {
-//            return blackKing;
-//        }
-//    }
-//
-//    @Override
-//    public String toString() {
-//        String result = "";
-//
-//        for (int i = 0; i < BOARD_SIZE; i++) {
-//            for (int j = 0; j < BOARD_SIZE; j++) {
-//                if (pieces[j][BOARD_SIZE - 1 - i] == null) {
-//                    result += " ";
-//                } else {
-//                    result += pieces[j][BOARD_SIZE - 1 - i].toString();
-//                }
-//                result += "" + j + (BOARD_SIZE - 1 -i) + " ";
-//            }
-//            result += "\n";
-//        }
-//        return result;
-//    }
 }

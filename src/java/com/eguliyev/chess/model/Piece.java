@@ -1,10 +1,13 @@
 package com.eguliyev.chess.model;
 
 import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.piece.Bishop;
-import com.eguliyev.chess.model.piece.Knight;
-import com.eguliyev.chess.model.piece.Queen;
-import com.eguliyev.chess.model.piece.Rook;
+import com.eguliyev.chess.model.chess.piece.Bishop;
+import com.eguliyev.chess.model.chess.piece.Knight;
+import com.eguliyev.chess.model.chess.piece.Queen;
+import com.eguliyev.chess.model.chess.piece.Rook;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -24,7 +27,15 @@ public abstract class Piece {
                 case ROOK:
                     return new Rook(board, null, color);
                 default:
-                    throw new ChessException("Huh?");
+                    return null;
+            }
+        }
+
+        public String toShortString() {
+            if (this == PieceKind.KNIGHT) {
+                return "n";
+            } else {
+                return this.toString().substring(0, 1).toLowerCase();
             }
         }
     }
@@ -89,9 +100,14 @@ public abstract class Piece {
         }
     }
 
+    public boolean isItMyTurn() {
+        return this.board.getTurn() == this.color;
+
+    }
+
     public MoveKind moveHelper(Square next) throws ChessException {
         try {
-            if (this.board.board.turn == this.color && this.canTakeOrMoveTo(next) != MoveKind.ILLEGAL) {
+            if (this.canTakeOrMoveTo(next) != MoveKind.ILLEGAL) {
                 board.setPiece(this.currentSquare.x, this.currentSquare.y, null);
                 this.currentSquare = next;
                 board.setPiece(this.currentSquare.x, this.currentSquare.y, this);
@@ -121,6 +137,7 @@ public abstract class Piece {
     public boolean attemptMove(Square next, PieceKind pieceKindForPromotion) throws ChessException {
         Board oldBoard = this.board.board;
         Board oldBoardCopy = new Board(oldBoard);
+
         MoveKind myMove = this.move(next);
 
         if (myMove != MoveKind.ILLEGAL && !this.board.getKing(this.color).isInCheck()) {

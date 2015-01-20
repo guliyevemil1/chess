@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model.piece;
+package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
 import com.eguliyev.chess.model.*;

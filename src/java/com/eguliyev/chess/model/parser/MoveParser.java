@@ -9,10 +9,11 @@ import com.eguliyev.chess.model.Move;
 public class MoveParser {
     public static Move parse(String moveString) {
         if (moveString.matches("[0-7]{4}[QRBN]?")) {
-            try {
-                return new Move(moveString.toCharArray());
-            } catch (ChessException e) {
-            }
+//            try {
+//                return new Move(moveString.toCharArray());
+                return null;
+//            } catch (ChessException e) {
+//            }
         }
 
         return null;
