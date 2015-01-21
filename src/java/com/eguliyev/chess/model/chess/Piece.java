@@ -1,13 +1,10 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 import com.eguliyev.chess.exception.ChessException;
 import com.eguliyev.chess.model.chess.piece.Bishop;
 import com.eguliyev.chess.model.chess.piece.Knight;
 import com.eguliyev.chess.model.chess.piece.Queen;
 import com.eguliyev.chess.model.chess.piece.Rook;
-import com.google.gson.*;
-
-import java.lang.reflect.Type;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -40,10 +37,6 @@ public abstract class Piece {
         }
     }
 
-    public static enum MoveKind {
-        ILLEGAL, NORMAL, CASTLE, ENPASSANT, PROMOTION, PAWN_TWO, PAWN_TAKE
-    }
-
     public PieceKind pieceKind;
     public BoardWrapper board;
     public Square currentSquare;
@@ -55,6 +48,7 @@ public abstract class Piece {
         currentSquare = initial;
         this.color = color;
     }
+
     public Direction getDirection(Square next) {
         return this.currentSquare.getMovementDirection(next);
     }
@@ -65,6 +59,7 @@ public abstract class Piece {
 
     public MoveKind horizontalVerticalMovementHelper(Direction direction, Square next) throws ChessException {
         if (direction == null) {
+            System.err.println("No direction given.");
             return MoveKind.ILLEGAL;
         } else {
             int xDiff = direction.x;
@@ -77,6 +72,7 @@ public abstract class Piece {
                 tmp.x += xDiff;
                 tmp.y += yDiff;
                 if (board.getPiece(tmp) != null) {
+                    System.err.println("Object in the way.");
                     return MoveKind.ILLEGAL;
                 }
             }
@@ -96,6 +92,7 @@ public abstract class Piece {
         if (pieceToBeTaken == null || pieceToBeTaken.color == color.opposite()) {
             return canMoveTo(next);
         } else {
+            System.err.println("Cannot take own piece.");
             return MoveKind.ILLEGAL;
         }
     }
@@ -116,6 +113,7 @@ public abstract class Piece {
         } catch (ChessException e) {
         }
 
+        System.err.println("The move was illegal.");
         return MoveKind.ILLEGAL;
     }
 
@@ -149,6 +147,7 @@ public abstract class Piece {
             }
 
             takeCareOfEnpassant(myMove);
+            System.out.println("CHANGING SIDE YO");
             this.board.changeSide();
             return true;
         }

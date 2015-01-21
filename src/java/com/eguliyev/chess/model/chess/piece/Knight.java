@@ -1,6 +1,6 @@
 package com.eguliyev.chess.model.chess.piece;
 
-import com.eguliyev.chess.model.*;
+import com.eguliyev.chess.model.chess.*;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -18,6 +18,7 @@ public class Knight extends Piece {
         if (distance == 5) {
             return MoveKind.NORMAL;
         } else {
+            System.err.println("Move doesn't make sense for Knight.");
             return MoveKind.ILLEGAL;
         }
     }

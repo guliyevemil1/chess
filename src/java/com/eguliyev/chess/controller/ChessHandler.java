@@ -1,7 +1,7 @@
 package com.eguliyev.chess.controller;
 
-import com.eguliyev.chess.model.Game;
-import com.eguliyev.chess.model.Move;
+import com.eguliyev.chess.model.chess.Game;
+import com.eguliyev.chess.model.chess.Move;
 import org.mortbay.jetty.HttpConnection;
 import org.mortbay.jetty.Request;
 import org.mortbay.jetty.handler.AbstractHandler;
@@ -37,6 +37,9 @@ public class ChessHandler extends AbstractHandler {
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
+        } else if (kind.equals("start")) {
+            response.setContentType("application/json");
+            out.print(Game.gson.toJson(game.board));
         } else if (kind.equals("move")) {
             Move move = new Move(
                     new String[] {
@@ -47,7 +50,6 @@ public class ChessHandler extends AbstractHandler {
                             request.getParameter("promotion")
                     });
 
-            System.out.println("Attempting move...");
             response.setContentType("application/json");
             if (move.attemptMove(game.board)) {
                 System.out.println("Success!");
@@ -77,8 +79,6 @@ public class ChessHandler extends AbstractHandler {
 
     private void serveRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestURI = request.getRequestURI();
-//        System.out.println("Requested URI: " + requestURI);
-//        System.out.println("Requested data: " + request.getParameter("name"));
 
         if (requestURI.startsWith("/")) {
             requestURI = requestURI.substring(1);
@@ -87,7 +87,7 @@ public class ChessHandler extends AbstractHandler {
         if ("".equals(requestURI)) {
             handleRequest(request, response);
         } else if ("favicon.ico".equals(requestURI)) {
-            return;
+            handleImage("src/web/resources/favicon.ico", response);
         } else if (requestURI.endsWith(".png")) {
             handleImage(requestURI, response);
         }

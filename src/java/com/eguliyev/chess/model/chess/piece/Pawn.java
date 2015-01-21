@@ -1,7 +1,7 @@
 package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.*;
+import com.eguliyev.chess.model.chess.*;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -28,6 +28,7 @@ public class Pawn extends Piece {
                 next.squareEquals(this.board.getEnpassantableSquare())) {
             return MoveKind.ENPASSANT;
         } else {
+            System.err.println("Direction doesn't make sense for pawn.");
             return MoveKind.ILLEGAL;
         }
     }
@@ -35,6 +36,7 @@ public class Pawn extends Piece {
     @Override
     public MoveKind move(Square next) throws ChessException {
         if (!isItMyTurn()) {
+            System.err.println("Not your turn yet.");
             return MoveKind.ILLEGAL;
         }
 

@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 import com.google.gson.*;
 import java.lang.reflect.Type;
@@ -10,7 +10,7 @@ public class Game {
     public final static Gson gson = new GsonBuilder()
             .serializeNulls()
             .registerTypeAdapter(Piece.class, new PieceSerializer())
-            .registerTypeAdapter(BoardWrapper.class, new BoardSerializer())
+            .registerTypeAdapter(Board.class, new BoardSerializer())
             .create();
 
     long gameId;
@@ -26,17 +26,17 @@ public class Game {
         }
     }
 
-    private static class BoardSerializer implements JsonSerializer<BoardWrapper> {
+    private static class BoardSerializer implements JsonSerializer<Board> {
         @Override
-        public JsonElement serialize(BoardWrapper src, Type typeOfSrc, JsonSerializationContext context) {
-            Board myBoard = src.board;
+        public JsonElement serialize(Board src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.add("pieces", gson.toJsonTree(myBoard.pieces));
-            jsonObject.addProperty("turn", myBoard.turn.toShortString());
-            jsonObject.add("enpassantSquare", gson.toJsonTree(myBoard.enPassantableSquare));
+            jsonObject.add("pieces", gson.toJsonTree(src.pieces));
+            jsonObject.addProperty("turn", src.turn.toShortString());
+            jsonObject.add("enpassantSquare", gson.toJsonTree(src.enPassantableSquare));
             return jsonObject;
         }
     }
+
 
     private static class PieceSerializer implements JsonSerializer<Piece> {
         @Override

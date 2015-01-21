@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 /**
  * Created by eguliyev on 12/20/14.

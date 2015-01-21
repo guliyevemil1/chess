@@ -1,7 +1,7 @@
 package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.*;
+import com.eguliyev.chess.model.chess.*;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -22,6 +22,7 @@ public class Rook extends Piece {
         if (direction != null && direction.rookLikeDirection()) {
             return horizontalVerticalMovementHelper(direction, next);
         } else {
+            System.err.println("Direction doesn't make sense for rook.");
             return MoveKind.ILLEGAL;
         }
     }
@@ -29,6 +30,7 @@ public class Rook extends Piece {
     @Override
     public MoveKind move(Square next) throws ChessException {
         if (!isItMyTurn()) {
+            System.err.println("Not your turn yet.");
             return MoveKind.ILLEGAL;
         }
 

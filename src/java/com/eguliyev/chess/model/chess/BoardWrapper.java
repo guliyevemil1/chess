@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 import com.eguliyev.chess.exception.ChessException;
 import com.eguliyev.chess.model.chess.piece.*;
@@ -55,7 +55,7 @@ public class BoardWrapper {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 if (board.pieces[i][j] != null &&
                         board.pieces[i][j].color == color &&
-                        board.pieces[i][j].canTakeOrMoveTo(square) != Piece.MoveKind.ILLEGAL) {
+                        board.pieces[i][j].canTakeOrMoveTo(square) != MoveKind.ILLEGAL) {
                     return true;
                 }
             }

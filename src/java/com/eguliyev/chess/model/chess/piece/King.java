@@ -1,7 +1,7 @@
 package com.eguliyev.chess.model.chess.piece;
 
 import com.eguliyev.chess.exception.ChessException;
-import com.eguliyev.chess.model.*;
+import com.eguliyev.chess.model.chess.*;
 
 /**
  * Created by eguliyev on 12/20/14.
@@ -56,6 +56,7 @@ public class King extends Piece {
         } else if (!hasMoved && canCastle(next)) {
             return MoveKind.CASTLE;
         }
+        System.err.println("King is moving too far away.");
         return MoveKind.ILLEGAL;
     }
 
@@ -78,6 +79,7 @@ public class King extends Piece {
     @Override
     public MoveKind move(Square next) throws ChessException {
         if (!isItMyTurn()) {
+            System.err.println("Not your turn yet.");
             return MoveKind.ILLEGAL;
         }
 

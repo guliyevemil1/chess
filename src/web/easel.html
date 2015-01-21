@@ -5,7 +5,9 @@
     <script>
       var start_x = 0;
       var start_y = 0;
-      var square_size = 90;
+      var actual_square_size = 90;
+      var desired_square_size = 45;
+      var square_size = desired_square_size;
 
       var piece_names = ["wp", "wn", "wb", "wr", "wq", "wk", "bp", "bn", "bb", "br", "bq", "bk"];
 
@@ -61,6 +63,8 @@
         temp.name = piece_name;
         temp.x = x * square_size;
         temp.y = y * square_size;
+        temp.scaleX = desired_square_size / actual_square_size;
+        temp.scaleY = desired_square_size / actual_square_size;
         stage.addChild(temp);
 
         temp.image.onload = function() { stage.update(); }
@@ -77,7 +81,6 @@
             });
 
         temp.addEventListener("pressup", function (evt) {
-
                 temp.x = temp.prevX;
                 temp.y = temp.prevY;
 
@@ -95,44 +98,19 @@
                             promotion : null
                         };
 
-            jQuery.ajax({ 
-                    type : "POST",
-                    url : "http://localhost:10000",
-                    data : my_move,
-                    success : function (response) { draw_board(stage, response) }
-                } );
+                console.log(my_move);
 
-
-                //temp.x = next_x * square_size;
-                //temp.y = next_y * square_size;
-                //stage.update();
+                jQuery.ajax({ 
+                        type : "POST",
+                        url : "http://localhost:10000",
+                        data : my_move,
+                        success : function (response) { draw_board(stage, response) }
+                    });
             });
       }
 
-      function drawPieces(stage) {
-        var piece_order = ["r","n","b","q","k","b","n","r"];
-        var i;
-
-        for (i = 0; i < piece_order.length; ++i) {
-            drawPiece(stage, "w" + piece_order[i], i, 7);
-        }
-
-        for (i = 0; i < piece_order.length; ++i) {
-            drawPiece(stage, "wp", i, 6);
-        }
-
-        for (i = 0; i < piece_order.length; ++i) {
-            drawPiece(stage, "b" + piece_order[i], i, 0);
-        }
-
-        for (i = 0; i < piece_order.length; ++i) {
-            drawPiece(stage, "bp", i, 1);
-        }
-      };
-
       function init() {
         var stage = new createjs.Stage("demoCanvas");
-        makeRectangles(stage);
 
         var i;
         for (i = 0; i < piece_names.length; ++i) {
@@ -140,7 +118,12 @@
             images[piece_name] = load_image(piece_name);
         }
 
-        drawPieces(stage);
+        jQuery.ajax({ 
+                type : "POST",
+                url : "http://localhost:10000",
+                data : { kind : "start" },
+                success : function (response) { draw_board(stage, response) }
+            } );
       }
 
     </script>

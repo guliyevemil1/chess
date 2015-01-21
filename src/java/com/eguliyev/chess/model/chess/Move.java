@@ -1,4 +1,4 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 import com.eguliyev.chess.exception.ChessException;
 
@@ -47,6 +47,8 @@ public class Move {
         Piece startingPiece = board.getPiece(start);
 
         if (startingPiece != null) {
+//            System.out.println("Attempting to move " + Game.gson.toJson(startingPiece));
+
             try {
                 return startingPiece.attemptMove(end, pieceToPromoteTo);
             } catch (ChessException e) {

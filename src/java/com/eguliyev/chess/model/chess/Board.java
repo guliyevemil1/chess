@@ -1,8 +1,6 @@
-package com.eguliyev.chess.model;
+package com.eguliyev.chess.model.chess;
 
 import com.eguliyev.chess.model.chess.piece.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * Created by eguliyev on 12/20/14.
