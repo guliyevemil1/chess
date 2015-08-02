@@ -6,35 +6,31 @@ package com.eguliyev.chess.model;
 public enum Color {
     BLACK, WHITE;
 
+    private int oppOrdinal() {
+        return 1 - this.ordinal();
+    }
+
     public Color opposite() {
-        if (this == BLACK) {
-            return WHITE;
-        } else {
-            return BLACK;
-        }
+        return Color.values()[oppOrdinal()];
     }
 
-    public int toInt() {
-        if (this == BLACK) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
-    public int pawnStartingPosition() {
-        return pawnStartingPosition(1);
+    public int sign() {
+        return 2 * this.ordinal() - 1;
     }
 
-
-    public int pawnStartingPosition(int y) {
-        if (this == BLACK) {
-            return 7 - y;
-        } else {
-            return y;
-        }
+    public int start(int x) {
+        return this.ordinal() * 7 + x * sign();
     }
 
-    public String toShortString() {
-        return this.toString().substring(0, 1).toLowerCase();
+    public int start() {
+        return start(0);
+    }
+
+    public int end(int x) {
+        return this.opposite().start(x);
+    }
+
+    public int end() {
+        return end(0);
     }
 }

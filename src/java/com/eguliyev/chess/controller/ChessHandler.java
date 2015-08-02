@@ -77,8 +77,8 @@ public class ChessHandler extends AbstractHandler {
 
     private void serveRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String requestURI = request.getRequestURI();
-//        System.out.println("Requested URI: " + requestURI);
-//        System.out.println("Requested data: " + request.getParameter("name"));
+        System.out.println("Requested URI: " + requestURI);
+        System.out.println("Requested data: " + request.getParameter("name"));
 
         if (requestURI.startsWith("/")) {
             requestURI = requestURI.substring(1);
@@ -99,9 +99,7 @@ public class ChessHandler extends AbstractHandler {
                        int x) throws IOException {
 
         response.setStatus(HttpServletResponse.SC_OK);
-
         serveRequest(request, response);
-
         Request base_request = (request instanceof Request) ? (Request) request
                 : HttpConnection.getCurrentConnection().getRequest();
         base_request.setHandled(true);

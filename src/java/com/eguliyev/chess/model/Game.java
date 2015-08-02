@@ -26,14 +26,12 @@ public class Game {
         }
     }
 
-    private static class BoardSerializer implements JsonSerializer<BoardWrapper> {
+    private static class BoardSerializer implements JsonSerializer<Board> {
         @Override
-        public JsonElement serialize(BoardWrapper src, Type typeOfSrc, JsonSerializationContext context) {
-            Board myBoard = src.board;
+        public JsonElement serialize(Board src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.add("pieces", gson.toJsonTree(myBoard.pieces));
-            jsonObject.addProperty("turn", myBoard.turn.toShortString());
-            jsonObject.add("enpassantSquare", gson.toJsonTree(myBoard.enPassantableSquare));
+            jsonObject.add("pieces", gson.toJsonTree(src.getPieces()));
+            jsonObject.addProperty("turn", src.getTurn().toString());
             return jsonObject;
         }
     }
