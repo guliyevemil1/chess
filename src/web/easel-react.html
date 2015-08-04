@@ -1,0 +1,129 @@
+<html>
+<head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Emil's chess app</title>
+    <script src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+    <script src="http://code.createjs.com/createjs-2014.12.12.min.js"></script>
+    <script src="src/react-0.13.3/build/react.js"></script>
+    <script src="src/react-0.13.3/build/JSXTransformer.js"></script>
+    <script type="text/jsx">
+        var ChessBoard = React.createClass({
+            toBoardPosition : function (pos) {
+                if (this.state.orientation == 1) {
+                    return [pos[1], 7 -pos[0]];
+                } else {
+                    return [7 - pos[1], pos[0]];
+                }
+            },
+            makePiece : function (stage, i, j) {
+                var pieceName = this.state.board[i][j];
+                if (pieceName == null) {
+                    return null;
+                }
+
+                var piece = new createjs.Bitmap(this.state.pieceImages[pieceName]);
+                piece.name = pieceName;
+                var s = this.state.squareSize;
+                var xy = this.toBoardPosition([i,j]);
+                piece.x = s * xy[0];
+                piece.y = s * xy[1];
+
+                piece.addEventListener("mousedown", function (evt) {
+                    piece.prevX = piece.x;
+                    piece.prevY = piece.y;
+                });
+
+                piece.addEventListener("pressmove", function (evt) {
+                    piece.x = evt.stageX - s / 2;
+                    piece.y = evt.stageY - s / 2;
+                    stage.update();
+                });
+                piece.addEventListener("pressup", function (evt) {
+                    piece.x = piece.prevX;
+                    piece.y = piece.prevY;
+                    var prevX = Math.floor(piece.prevX / s);
+                    var prevY = Math.floor(piece.prevY / s);
+                    var nextX = Math.floor(evt.stageX / s);
+                    var nextY = Math.floor(evt.stageY / s);
+                    var myMove = {
+                                kind : "move",
+                                prevX : prevX,
+                                prevY: prevY,
+                                nextX : nextX,
+                                nextY : nextY,
+                                promotion : null
+                            };
+
+                    jQuery.ajax({
+                            type : "POST",
+                            url : "/",
+                            data : myMove,
+                            success : function (response) {
+                                console.log(response);
+                            }.bind(this)
+                        });
+                    });
+                return piece;
+            },
+            drawBoard : function (stage) {
+                for (i = 0; i < 8; i++) {
+                    for (j = 0; j < 8; j++) {
+                        var rect = new createjs.Shape();
+                        var s = this.state.squareSize;
+                        rect.graphics
+                          .beginFill(this.state.tileColors[(i + j) % 2])
+                          .drawRect(s * i, s * j, s, s);
+                        stage.addChild(rect);
+                    }
+                }
+
+                for (i = 0; i < 8; i++) {
+                    for (j = 0; j < 8; j++) {
+                        var piece = this.makePiece(stage, i,j);
+                        if (piece != null) {
+                            stage.addChild(piece);
+                            piece.image.onload = function () { stage.update(); };
+                        }
+                    }
+                }
+                stage.update();
+            },
+            getInitialState : function () {
+                return {
+                    pieceImages : (function () {
+                        var pieceNames = ["wp", "wn", "wb", "wr", "wq", "wk", "bp", "bn", "bb", "br", "bq", "bk"];
+                        return pieceNames.reduce(function (myMap, pieceName) {
+                                var image = new Image();
+                                image.src = "src/web/resources/" + pieceName + ".png"
+                                myMap[pieceName] = image;
+                                return myMap;
+                              }, {});
+                        })(),
+                    squareSize : 90,
+                    board : [
+                        ["wr","wn","wb","wq","wk","wb","wn","wr"],
+                        ["wp","wp","wp","wp","wp","wp","wp","wp"],
+                        [null, null, null, null, null, null, null, null],
+                        [null, null, null, null, null, null, null, null],
+                        [null, null, null, null, null, null, null, null],
+                        [null, null, null, null, null, null, null, null],
+                        ["bp","bp","bp","bp","bp","bp","bp","bp"],
+                        ["br","bn","bb","bq","bk","bb","bn","br"]],
+                    orientation : 1,
+                    tileColors : ["#909890", "#227070"],
+                    turn : 1
+                }
+            },
+            render : function () {
+                var stage = new createjs.Stage("boardCanvas");
+                this.drawBoard(stage);
+                return <div/>;
+            }
+        });
+    React.render(<ChessBoard/>, document.getElementById("board"));
+    </script>
+</head>
+<canvas id="boardCanvas" width="720" height="720"></canvas>
+<div id="board"/>
+</body>
+</html>

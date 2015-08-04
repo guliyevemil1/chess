@@ -10,7 +10,7 @@ public class Game {
     public final static Gson gson = new GsonBuilder()
             .serializeNulls()
             .registerTypeAdapter(Piece.class, new PieceSerializer())
-            .registerTypeAdapter(BoardWrapper.class, new BoardSerializer())
+            .registerTypeAdapter(Board.class, new BoardSerializer())
             .create();
 
     long gameId;
@@ -39,7 +39,7 @@ public class Game {
     private static class PieceSerializer implements JsonSerializer<Piece> {
         @Override
         public JsonElement serialize(Piece src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
-            JsonPrimitive jsonObject = new JsonPrimitive(src.color.toShortString() + src.pieceKind.toShortString());
+            JsonPrimitive jsonObject = new JsonPrimitive(src.getColor().toString() + src.getPieceKind().toString());
             return jsonObject;
         }
     }

@@ -6,16 +6,12 @@ package com.eguliyev.chess.model;
 public enum Color {
     BLACK, WHITE;
 
-    private int oppOrdinal() {
-        return 1 - this.ordinal();
-    }
-
     public Color opposite() {
-        return Color.values()[oppOrdinal()];
+        return Color.values()[1 - this.ordinal()];
     }
 
     public int sign() {
-        return 2 * this.ordinal() - 1;
+        return 1 - 2 * this.ordinal();
     }
 
     public int start(int x) {

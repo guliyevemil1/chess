@@ -7,22 +7,22 @@ import org.mortbay.jetty.Server;
  * Created by eguliyev on 12/23/14.
  */
 public class ChessHttpServer {
+    public static ChessHttpServer server = new ChessHttpServer();
 
-    ChessHttpServer() {
+    private ChessHttpServer() {
+        this(ChessConstants.DEFAULT_PORT);
+    }
+
+    private ChessHttpServer(int port) {
         Server server;
-        server = new Server(ChessConstants.DEFAULT_PORT);
+        server = new Server(port);
         server.setHandler(new ChessHandler());
 
         try {
             server.start();
             server.join();
         } catch (Exception e) {
-//            logger.fatal("Jetty threw an exception during execution: ", e);
             System.exit(-1);
         }
-    }
-
-    public static void main(String[] args) {
-        ChessHttpServer chessHttpServer = new ChessHttpServer();
     }
 }

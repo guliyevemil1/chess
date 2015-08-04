@@ -21,8 +21,7 @@ import java.util.stream.Stream;
 * Created by eguliyev on 12/26/14.
 */
 public class ChessHandler extends AbstractHandler {
-
-    Path mainPath = Paths.get("src/web/easel.html");
+    Path mainPath = Paths.get("src/web/easel-react.html");
     Game game = new Game();
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,30 +37,37 @@ public class ChessHandler extends AbstractHandler {
                 throw new RuntimeException(e);
             }
         } else if (kind.equals("move")) {
-            Move move = new Move(
-                    new String[] {
-                            request.getParameter("prev_x"),
-                            request.getParameter("prev_y"),
-                            request.getParameter("next_x"),
-                            request.getParameter("next_y"),
-                            request.getParameter("promotion")
-                    });
 
-            System.out.println("Attempting move...");
+            Move move = Move.createMove(
+                    request.getParameter("prevX"),
+                    request.getParameter("prevY"),
+                    request.getParameter("nextX"),
+                    request.getParameter("nextY"),
+                    request.getParameter("promotion")
+            );
+
             response.setContentType("application/json");
-            if (move.attemptMove(game.board)) {
-                System.out.println("Success!");
-                out.print(Game.gson.toJson(game.board));
-            } else {
-                System.out.println("Failure!");
-                out.print(Game.gson.toJson(null));
-            }
-            System.out.println(game.board.getTurn());
+            out.print("{success : \"true\"}");
         }
     }
 
     private void handleImage(String requestURI, HttpServletResponse response) throws IOException {
         response.setContentType("image/png");
+
+        byte[] buf = new byte[1024];
+        ServletOutputStream out = response.getOutputStream();
+        FileInputStream in = new FileInputStream(requestURI);
+
+        int count;
+        while ((count = in.read(buf)) >= 0) {
+            out.write(buf, 0, count);
+        }
+
+        in.close();
+    }
+
+    private void handleJS(String requestURI, HttpServletResponse response) throws IOException {
+        response.setContentType("text/javascript");
 
         byte[] buf = new byte[1024];
         ServletOutputStream out = response.getOutputStream();
@@ -90,7 +96,10 @@ public class ChessHandler extends AbstractHandler {
             return;
         } else if (requestURI.endsWith(".png")) {
             handleImage(requestURI, response);
+        } else if (requestURI.endsWith(".js")) {
+            handleJS(requestURI, response);
         }
+
     }
 
     public void handle(String target,

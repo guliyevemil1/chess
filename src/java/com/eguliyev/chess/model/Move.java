@@ -26,6 +26,7 @@ public final class Move {
     MoveKind moveKind;
 
     public static final Move UNMOVED = new Move(-1,-1,-1,-1);
+    public static final Move UNPARSED = UNMOVED;
 
     public static final int KING_X = 4;
     public static final int KING_SIDE_ROOK_X = 7;
@@ -41,16 +42,33 @@ public final class Move {
     }
 
     public Move(int startX,
-            int endX,
-            int startY,
-            int endY,
-            Piece.PieceKind promotionPiece) {
+                int endX,
+                int startY,
+                int endY,
+                Piece.PieceKind promotionPiece) {
         this.startX = startX;
         this.endX = endX;
         this.startY = startY;
         this.endY = endY;
         this.promotionPiece = promotionPiece;
         this.moveKind = MoveKind.NONE;
+    }
+
+    private Move(String... result) {
+        this.startX = Integer.parseInt(result[0]);
+        this.startY = Integer.parseInt(result[1]);
+        this.endX = Integer.parseInt(result[2]);
+        this.endY = Integer.parseInt(result[3]);
+        this.promotionPiece = Piece.PieceKind.NONE;
+        this.moveKind = MoveKind.NONE;
+    }
+
+    public static Move createMove(String... result) {
+        try {
+            return new Move(result);
+        } catch (NumberFormatException e) {
+            return UNPARSED;
+        }
     }
 
     boolean isDiagonal() {
